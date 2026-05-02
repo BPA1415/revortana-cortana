@@ -1,0 +1,1 @@
+Add these exact lines to your hosts file: 127.0.0.1 ://live.com, 127.0.0.1 ://microsoft.com, 127.0.0.1 bing.com
