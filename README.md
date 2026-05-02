@@ -8,3 +8,5 @@ You can download/get it in python.org.
 You can download/get it in GitHub.
 # Notepad (run this as Administrator)
 Add these exact lines to your hosts file: 127.0.0.1 ://live.com, 127.0.0.1 ://microsoft.com, 127.0.0.1 bing.com.
+
+(You can go to https://github.com/BPA1415/revortana-cortana-2/ if you want.)
