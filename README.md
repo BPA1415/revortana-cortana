@@ -7,3 +7,4 @@ You can download/get it in python.org.
 (You can get the release but  some things are not working.)
 You can download/get it in GitHub.
 # Notepad (run this as Administrator)
+Add these exact lines to your hosts file: 127.0.0.1 ://live.com, 127.0.0.1 ://microsoft.com, 127.0.0.1 bing.com.
