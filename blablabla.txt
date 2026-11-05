@@ -1,0 +1,54 @@
+Windows XP experimental Python notes
+====================================
+
+Candidate interpreter
+---------------------
+
+Python 3.4.4 is the last official Python release for Windows XP.
+Use a 32-bit installation. Newer Python releases and current package
+versions do not support XP.
+
+Candidate legacy packages to test (not verified on XP):
+
+Flask==1.0.4
+Werkzeug==0.15.5
+Jinja2==2.10.3
+itsdangerous==1.1.0
+click==7.0
+MarkupSafe==1.1.1
+
+Install on the XP machine only if pip and its TLS connection to the package
+index work:
+
+    python -m pip install Flask==1.0.4 Werkzeug==0.15.5 Jinja2==2.10.3 itsdangerous==1.1.0 click==7.0 MarkupSafe==1.1.1
+
+Runtime and TLS probe (Python 3.4 syntax)
+-----------------------------------------
+
+Save this as xp_probe.py and run `python xp_probe.py`:
+
+    import platform
+    import ssl
+    import sys
+
+    print("Python: " + sys.version.replace("\n", " "))
+    print("Platform: " + platform.platform())
+    print("TLS server pro
+    if sys.version_info[:2] != (3, 4):
+        print("Expected Python 3.4.x for this XP experiment.")
+    if not hasattr(ssl, "PROTOCOL_TLS_SERVER"):
+        print("The current Revortana TLS startup code needs a compatibility port.")
+
+Application compatibility work still required
+----------------------------------------tocol available: " +
+          str(hasattr(ssl, "PROTOCOL_TLS_SERVER")))
+    print("OpenSSL: " + getattr(ssl, "OPENSSL_VERSION", "unavailable"))
+------
+
+The current Revortana source is not Python 3.4 compatible as-is. Before
+attempting a run, it needs a separate port for Python 3.4 syntax and APIs,
+Flask 1.0 route registration, dataclasses, and TLS context creation. The
+legacy dependency list alone does not make the server compatible.
+
+Windows XP and its TLS stack are obsolete. Do not expose this experiment to
+the public internet or enter API keys or sensitive data on that system.

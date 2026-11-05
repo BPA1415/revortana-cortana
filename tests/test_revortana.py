@@ -28,8 +28,171 @@ def test_home_page_includes_local_assets(client):
 
     assert client.get("/static/style.css").status_code == 200
     assert client.get("/static/app.js").status_code == 200
+    for asset in (
+        "assistant.css",
+        "assistant-personality.js",
+        "assistant-skills.js",
+        "assistant-effects.js",
+    ):
+        assert client.get("/static/" + asset).status_code == 200
+        assert asset in page
     assert "/static/style.css" in page
     assert "/static/app.js" in page
+
+
+def test_assistant_extras_provide_profile_skills_and_effects(client):
+    page = client.get("/").get_data(as_text=True)
+    skills = client.get("/static/assistant-skills.js").get_data(as_text=True)
+    effects = client.get("/static/assistant-effects.js").get_data(as_text=True)
+    styles = client.get("/static/assistant.css").get_data(as_text=True)
+    app_script = client.get("/static/app.js").get_data(as_text=True)
+
+    assert 'id="sound-toggle"' in page
+    assert "window.RevortanaPersonality" in app_script
+    assert "window.RevortanaSkills.run(text)" in app_script
+    assert "window.RevortanaEffects" in effects
+    assert "unlockAudio" in effects
+    assert "AudioContext" in effects
+    assert "flip a coin" in skills
+    assert "roll a die" in skills
+    assert "give me a riddle" in skills
+    assert "is-thinking .orb" in styles
+
+
+def test_static_assets_include_windows_8_1_browser_fallbacks(client):
+    page = client.get("/").get_data(as_text=True)
+    styles = client.get("/static/style.css").get_data(as_text=True)
+
+    assert 'http-equiv="X-UA-Compatible"' in page
+    for asset in (
+        "app.js",
+        "assistant-personality.js",
+        "assistant-skills.js",
+        "assistant-effects.js",
+    ):
+        script = client.get("/static/" + asset).get_data(as_text=True)
+        if asset == "app.js":
+            assert "XMLHttpRequest" in script
+        for unsupported_syntax in (
+            "const ",
+            "let ",
+            "async ",
+            "await ",
+            "=>",
+            "fetch(",
+        ):
+            assert unsupported_syntax not in script
+    assert "font-size: 58px;" in styles
+    assert "width: calc(100% - 48px);" in styles
+
+
+def test_static_assistant_includes_more_local_reply_topics(client):
+    script = client.get("/static/app.js").get_data(as_text=True)
+
+    for reply in (
+        "Berlin is the capital of Germany.",
+        "Canberra is the capital of Australia.",
+        "I’m rather fond of blue",
+        "sunlight takes about eight minutes",
+        "A black hole is a region of space",
+        "The Sun is the star at the center",
+        "I’m sorry you’re having a hard moment.",
+    ):
+        assert reply in script
+
+
+def test_static_assistant_has_34_additional_local_replies(client):
+    script = client.get("/static/app.js").get_data(as_text=True)
+    additional_replies = script.split("var additionalReplies = [", 1)[1].split(
+        "\n  ];", 1
+    )[0]
+
+    assert additional_replies.count("{ pattern:") == 34
+    assert "Brasília is the capital of Brazil." in additional_replies
+    assert "Mars is often called the Red Planet" in additional_replies
+
+
+def test_static_assistant_has_60_more_local_replies(client):
+    script = client.get("/static/app.js").get_data(as_text=True)
+    more_replies = script.split("var moreReplies = [", 1)[1].split(
+        "\n  ];", 1
+    )[0]
+
+    assert more_replies.count("{ pattern:") == 60
+    assert "Lisbon is the capital of Portugal." in more_replies
+    assert "I’m sorry you’re feeling lonely." in more_replies
+    assert "How about Luma" in more_replies
+
+
+def test_windows_vista_launcher_uses_python_36_dependencies():
+    launcher = (revortana.PROJECT_DIR / "run_windows_vista.bat").read_text()
+    requirements = (
+        revortana.PROJECT_DIR / "requirements-windows-vista.txt"
+    ).read_text()
+
+    assert "py -3.6 -m venv" in launcher
+    assert "requirements-windows-vista.txt" in launcher
+    assert "Flask==2.0.3" in requirements
+    assert "dataclasses==0.8" in requirements
+
+
+@pytest.mark.parametrize(
+    ("launcher_name", "requirements_name"),
+    [
+        ("run_windows_7.bat", "requirements-windows-7.txt"),
+        ("run_windows_8.1.bat", "requirements-windows-8.1.txt"),
+    ],
+)
+def test_legacy_windows_launchers_use_python_38_compatible_dependencies(
+    launcher_name, requirements_name
+):
+    launcher = (revortana.PROJECT_DIR / launcher_name).read_text()
+    requirements = (
+        revortana.PROJECT_DIR / requirements_name
+    ).read_text().splitlines()
+
+    assert "py -3.8 -m venv" in launcher
+    assert requirements_name in launcher
+    assert "Flask==3.0.3" in requirements
+    assert "Werkzeug==3.0.6" in requirements
+
+
+@pytest.mark.parametrize(
+    ("folder", "launcher_name", "requirements_name", "venv"),
+    [
+        (
+            "winvista",
+            "run_windows_vista.bat",
+            "requirements-windows-vista.txt",
+            ".venv-windows-vista",
+        ),
+        (
+            "win7",
+            "run_windows_7.bat",
+            "requirements-windows-7.txt",
+            ".venv-windows7",
+        ),
+        (
+            "win8.1",
+            "run_windows_8.1.bat",
+            "requirements-windows-8.1.txt",
+            ".venv-windows81",
+        ),
+    ],
+)
+def test_platform_folder_copies_work_from_project_root(
+    folder, launcher_name, requirements_name, venv
+):
+    root = revortana.PROJECT_DIR
+    launcher = (root / folder / launcher_name).read_text()
+
+    assert (root / folder / requirements_name).read_text() == (
+        root / requirements_name
+    ).read_text()
+    assert 'cd /d "%SCRIPT_DIR%.." || exit /b 1' in launcher
+    assert f'set "VENV_DIR={venv}"' in launcher
+    assert requirements_name in launcher
+    assert f'"%VENV_DIR%\\Scripts\\python.exe" revortana.py' in launcher
 
 
 def test_health_endpoint_returns_json(client):

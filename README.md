@@ -1,6 +1,6 @@
 # revortana-cortana
 
-A private Cortana revival server made by guutut (riro)
+A private Cortana revival server made by guutut.
 
 ## Requirements
 
@@ -11,8 +11,12 @@ A private Cortana revival server made by guutut (riro)
 The Python dependency is installed from `requirements.txt`.
 
 The home page includes a small nostalgic assistant-themed interface.
-Built-in replies are local. Other questions are sent to OpenAI when you
-configure an API key; they are not sent to Cortana or Microsoft.
+Built-in local replies include greetings, capital cities, science and space
+facts, friendly conversation, and small interactive skills such as coin flips
+and dice rolls. The orb reacts while the assistant listens, thinks, and
+responds; optional notification chimes are synthesized in the browser. Other
+questions are sent to OpenAI when you configure an API key; they are not sent
+to Cortana or Microsoft.
 
 ## Linux setup
 
@@ -115,27 +119,32 @@ Do not put the key in source files or commit it to the repository.
 
 ## Windows setup
 
-1. Install Python 3.8 or newer and make sure the Python launcher (`py`) or
-   `python` command is available.
+1. On Windows 8.1, install Python 3.8 and make sure the Python launcher (`py`)
+   or `python` command is available. Use `run_windows_8.1.bat` to create a
+   separate Python 3.8 environment for that system. The included page also
+   supports the Internet Explorer 11 browser available on Windows 8.1; other
+   browsers may be used as well. Windows 8.1 is no longer supported by
+   Microsoft, so use it only on a trusted, isolated network.
 2. Keep the certificate and key files in the project directory.
-3. From File Explorer, double-click `run_windows.bat`, or run it from
+3. From File Explorer, double-click `run_windows_8.1.bat`, or run it from
    Command Prompt or PowerShell in the project directory:
 
    ```powershell
-   .\run_windows.bat
+   .\run_windows_8.1.bat
    ```
 
-   The launcher creates a local `.venv`, installs the requirements, and starts
-   the HTTPS server. Port 443 can require elevated privileges on Windows too.
-   To use an unprivileged port instead, set it before launching:
+   The launcher creates a local `.venv-windows81`, installs the pinned
+   dependencies from `requirements-windows-8.1.txt`, and starts the HTTPS
+   server. Port 443 can require elevated privileges on Windows too. To use an
+   unprivileged port instead, set it before launching:
 
    ```powershell
    $env:REVORTANA_PORT = "8443"
-   .\run_windows.bat
+   .\run_windows_8.1.bat
    ```
 
    In Command Prompt, use `set REVORTANA_PORT=8443` before running the batch
-   file.
+   file. For other Windows versions, use `run_windows.bat`.
 4. If the client needs these domains directed to the server, open Notepad as
    Administrator and add this line to
    `C:\Windows\System32\drivers\etc\hosts`:
@@ -145,6 +154,46 @@ Do not put the key in source files or commit it to the repository.
    ```
 
    Remove the line when you no longer want those domains redirected.
+
+### Windows 7
+
+Windows 7 is no longer supported by Microsoft. Use only on a trusted,
+isolated network. Install Python 3.8 (Python 3.8.10 is recommended) and the
+Python launcher, keep the certificate and key in the project directory, and
+run `run_windows_7.bat`. It creates a separate `.venv-windows7` environment,
+installs the pinned dependencies from `requirements-windows-7.txt`, and starts
+the server:
+
+```bat
+run_windows_7.bat
+```
+
+Port 443 may require elevated privileges. To use another port, set
+`REVORTANA_PORT` before launching (for example, `set REVORTANA_PORT=8443` in
+Command Prompt).
+
+### Windows Vista
+
+Windows Vista is no longer supported by Microsoft and is not recommended for
+network use. If you still choose to run the server, use an isolated, trusted
+network. Install Python 3.6 (3.6.8 recommended) and the Python launcher, keep
+the certificate and key in the project directory, and run
+`run_windows_vista.bat`. It creates a separate `.venv-windows-vista`
+environment and installs the pinned legacy dependencies from
+`requirements-windows-vista.txt`:
+
+```bat
+run_windows_vista.bat
+```
+
+Port 443 may require elevated privileges. To use another port, set
+`REVORTANA_PORT` before launching (for example, `set REVORTANA_PORT=8443` in
+Command Prompt). The Vista-specific dependency set is for Python 3.6 only;
+use the regular requirements on newer Windows versions.
+
+The `winvista/`, `win7/`, and `win8.1/` folders contain copies of the matching
+launcher and requirements file. You can run the launcher from its folder; it
+uses the application files in the parent project directory.
 
 The server can also be started directly on either platform after installing
 the requirements with `python -m pip install -r requirements.txt`:

@@ -2,11 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#071724">
   <meta name="description" content="A nostalgic, local Revortana assistant experience.">
   <title>Revortana — your personal assistant</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='assistant.css') }}">
+  <script src="{{ url_for('static', filename='assistant-personality.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='assistant-skills.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='assistant-effects.js') }}" defer></script>
   <script src="{{ url_for('static', filename='app.js') }}" defer></script>
 </head>
 <body>
@@ -17,6 +22,8 @@
         <span>revortana</span>
       </a>
       <div class="connection"><span class="connection-dot"></span> LOCAL REVIVAL</div>
+      <button class="sound-toggle" id="sound-toggle" type="button"
+              aria-label="Toggle assistant sound effects" aria-pressed="true">SOUND ON</button>
     </header>
 
     <main>
@@ -34,6 +41,7 @@
         <p class="eyebrow">YOUR PERSONAL ASSISTANT</p>
         <h1 id="welcome-title">Hey there.</h1>
         <p class="subtitle">A little piece of the future, remembered.</p>
+        <p class="assistant-status" id="assistant-status" aria-live="polite">READY TO LISTEN</p>
 
         <form class="ask" id="ask-form">
           <label class="sr-only" for="question">Ask Revortana</label>

@@ -37,7 +37,8 @@ a {
 .shell {
   display: flex;
   flex-direction: column;
-  width: min(100% - 48px, 1024px);
+  width: calc(100% - 48px);
+  max-width: 1024px;
   min-height: 100vh;
   margin: 0 auto;
 }
@@ -53,7 +54,6 @@ a {
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 11px;
   font-family: "Segoe UI", "Trebuchet MS", sans-serif;
   font-size: 19px;
   font-weight: 600;
@@ -61,10 +61,15 @@ a {
 }
 
 .brand-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   display: grid;
   width: 23px;
   height: 23px;
   place-items: center;
+  margin-right: 11px;
+  border: 2px solid #42c8ff;
   border: 2px solid var(--blue);
   border-radius: 50%;
   box-shadow: 0 0 16px rgba(66, 200, 255, .4), inset 0 0 10px rgba(66, 200, 255, .24);
@@ -75,6 +80,7 @@ a {
   height: 7px;
   border-radius: 50%;
   background: #d7f7ff;
+  box-shadow: 0 0 9px #42c8ff;
   box-shadow: 0 0 9px var(--blue);
 }
 
@@ -90,7 +96,6 @@ footer {
 .connection {
   display: flex;
   align-items: center;
-  gap: 8px;
   color: #a4bbcb;
 }
 
@@ -100,6 +105,7 @@ footer {
   border-radius: 50%;
   background: #73e5b3;
   box-shadow: 0 0 10px rgba(115, 229, 179, .65);
+  margin-right: 8px;
 }
 
 main {
@@ -119,6 +125,9 @@ main {
 
 .orb-wrap {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   display: grid;
   width: 178px;
   height: 178px;
@@ -138,6 +147,9 @@ main {
 
 .orb {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   display: grid;
   width: 92px;
   height: 92px;
@@ -193,12 +205,14 @@ main {
 
 .eyebrow {
   margin: 0 0 11px;
+  color: #42c8ff;
   color: var(--blue);
 }
 
 h1 {
   margin: 0;
   font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+  font-size: 58px;
   font-size: clamp(42px, 7vw, 58px);
   font-weight: 500;
   letter-spacing: -2.7px;
@@ -206,6 +220,7 @@ h1 {
 
 .subtitle {
   margin: 9px 0 28px;
+  color: #9db1c3;
   color: var(--muted);
   font-size: 15px;
 }
@@ -213,8 +228,8 @@ h1 {
 .ask {
   display: flex;
   align-items: center;
-  gap: 14px;
-  width: min(100%, 530px);
+  width: 100%;
+  max-width: 530px;
   height: 58px;
   padding: 0 8px 0 20px;
   border: 1px solid rgba(157, 196, 218, .25);
@@ -234,6 +249,7 @@ h1 {
   width: 15px;
   height: 15px;
   flex: 0 0 auto;
+  margin-right: 14px;
   border: 1.5px solid #8da9bb;
   border-radius: 50%;
 }
@@ -258,15 +274,24 @@ h1 {
   background: transparent;
 }
 
+.ask input:focus {
+  outline: 2px solid #42c8ff;
+  outline-offset: 3px;
+}
+
 .ask input::placeholder {
   color: #8da2b3;
 }
 
 .ask button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   display: grid;
   width: 40px;
   height: 40px;
   flex: 0 0 auto;
+  margin-left: 14px;
   place-items: center;
   border: 0;
   border-radius: 6px;
@@ -282,8 +307,8 @@ h1 {
   filter: brightness(1.1);
 }
 
-.ask button:focus-visible,
-a:focus-visible {
+.ask button:focus,
+a:focus {
   outline: 2px solid #b0ecff;
   outline-offset: 4px;
 }
@@ -301,7 +326,6 @@ a:focus-visible {
 .reply {
   display: flex;
   flex-direction: column;
-  gap: 8px;
   min-height: 42px;
   margin: 24px 0 0;
   color: #d3e2ec;
@@ -312,13 +336,14 @@ a:focus-visible {
 .reply-label {
   color: #6fcff6;
   font-size: 9px;
+  margin-bottom: 8px;
 }
 
 .memory-card {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
-  width: min(100%, 680px);
+  width: 100%;
+  max-width: 680px;
   margin: 0 auto 55px;
   padding: 21px 24px;
   border: 1px solid rgba(158, 195, 216, .13);
@@ -327,10 +352,14 @@ a:focus-visible {
 }
 
 .memory-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   display: grid;
   width: 33px;
   height: 33px;
   flex: 0 0 auto;
+  margin-right: 16px;
   place-items: center;
   border: 1px solid rgba(90, 195, 235, .25);
   border-radius: 7px;
@@ -363,11 +392,14 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
   min-height: 58px;
   border-top: 1px solid rgba(167, 207, 231, .1);
   color: #728b9d;
   font-size: 9px;
+}
+
+footer > * + * {
+  margin-left: 14px;
 }
 
 footer a:hover {
@@ -403,7 +435,8 @@ footer a:hover {
 
 @media (max-width: 600px) {
   .shell {
-    width: min(100% - 32px, 1024px);
+    width: calc(100% - 32px);
+    max-width: 1024px;
   }
 
   .topbar {
@@ -424,9 +457,12 @@ footer a:hover {
   }
 
   .memory-card {
-    gap: 12px;
     margin-bottom: 35px;
     padding: 17px;
+  }
+
+  .memory-icon {
+    margin-right: 12px;
   }
 
   .memory-date {
