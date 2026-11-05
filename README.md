@@ -1,6 +1,6 @@
 # revortana-cortana
 
-A private Cortana revival server made by guutut.
+A private Cortana revival server made by guutut. 
 
 ## Requirements
 
